@@ -1,0 +1,50 @@
+Description: >
+  Template dell'infrastruttura per TEDx
+
+Parameters:
+  BuildNumber:
+    Default: "1"
+    Description: "build number"
+    Type: String
+    MinLength: 1
+    ConstraintDescription: "is required"
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "CodePipeline settings"
+        Parameters:
+          - BuildNumber
+
+    ParameterLabels:
+      BuildNumber:
+        default: "BuildNumber"
+
+# --- BEGIN OUR INFRASTRUCTURE ---
+Resources:
+  # Crea un bucket S3 per i dati
+  DataS3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: "pg9-compito-data"
+  # Crea un bucket S3 per i gli script
+  ScriptS3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: "pg9-compito-script"
+  # Crea un bucket S3 per i log
+  LogsS3Bucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: "pg9-compito-logs"
+  # Creo un DB relazionale Aurora
+  RDSAuroraPSQL:
+    Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: Retain
+    Engine: postgres
+    Properties:
+      DatabaseName: "pg9-compito-rds"
