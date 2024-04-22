@@ -34,3 +34,6 @@ Amazon Aurora/DynamoDB: Database per tenere i contenuti (Da scegliere il tipo di
 React/Flutter: Framework App mobile
 Github/Lab: Storage del codice e versionamento
 Draw.io: Creazione diagramma grafico
+
+## Opzioni
+l'utente si iscrive a degli argomenti, notifiche push per avvisarlo. trascrizione del video per avere + tag
