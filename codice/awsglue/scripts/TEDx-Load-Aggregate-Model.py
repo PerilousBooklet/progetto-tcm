@@ -13,8 +13,6 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 
 
-
-
 ##### FROM FILES
 tedx_dataset_path = "s3://pg9-tedx-2024-data/final_list.csv"
 
@@ -48,8 +46,8 @@ tedx_dataset.printSchema()
 count_items = tedx_dataset.count()
 count_items_null = tedx_dataset.filter("id is not null").count()
 
-#print(f"Number of items from RAW DATA {count_items}")
-#print(f"Number of items from RAW DATA with NOT NULL KEY {count_items_null}")
+print(f"Number of items from RAW DATA {count_items}")
+print(f"Number of items from RAW DATA with NOT NULL KEY {count_items_null}")
 
 ## READ THE DETAILS
 details_dataset_path = "s3://pg9-tedx-2024-data/details.csv"
@@ -60,15 +58,15 @@ details_dataset = spark.read \
 	.csv(details_dataset_path)
 
 details_dataset = details_dataset.select(col("id").alias("id_ref"),
-										 col("description"),
-										 col("duration"),
-										 col("publishedAt"))
+	col("description"),
+	col("duration"),
+	col("publishedAt"))
 
 # AND JOIN WITH THE MAIN TABLE
 tedx_dataset_main = tedx_dataset.join(details_dataset, tedx_dataset.id == details_dataset.id_ref, "left") \
 	.drop("id_ref")
 
-#tedx_dataset_main.printSchema()
+tedx_dataset_main.printSchema()
 
 ## READ TAGS DATASET
 tags_dataset_path = "s3://pg9-tedx-2024-data/tags.csv"
@@ -83,7 +81,7 @@ tedx_dataset_agg = tedx_dataset_main.join(tags_dataset_agg, tedx_dataset.id == t
 	.select(col("id").alias("_id"), col("*")) \
 	.drop("id") \
 
-#tedx_dataset_agg.printSchema()
+tedx_dataset_agg.printSchema()
 
 
 ## READ THE DETAILS
@@ -95,9 +93,9 @@ details_dataset = spark.read \
 	.csv(details_dataset_path)
 
 details_dataset = details_dataset.select(col("id").alias("id_ref"),
-										 col("description"),
-										 col("duration"),
-										 col("publishedAt"))
+	col("description"),
+	col("duration"),
+	col("publishedAt"))
 
 
 ## READ THE IMAGES (VERSIONE NUOVA)
@@ -109,13 +107,13 @@ images_dataset = spark.read \
 	.csv(images_dataset_path)
 
 images_dataset = images_dataset.select(col("id").alias("id_ref"),
-										 col("url"))
+	col("url").alias("img_url"))
 
 # AND JOIN WITH THE MAIN TABLE
 tedx_dataset_agg_img = tedx_dataset_agg.join(images_dataset, tedx_dataset_agg._id == images_dataset.id_ref, "left") \
 	.drop("id_ref")
 
-#tedx_dataset_agg_img.printSchema()
+tedx_dataset_agg_img.printSchema()
 
 
 ## READ WATCH NEXT DATASET
@@ -126,7 +124,7 @@ wn_real_id = wn_dataset.select(col("internalId").alias("internal"), col("id").al
 
 wn_dataset = wn_dataset.join(wn_real_id, wn_dataset.related_id==wn_real_id.internal, "left")
 
-#wn_dataset.printSchema()
+wn_dataset.printSchema()
 
 # CREATE THE AGGREGATE MODEL, ADD TAGS TO TEDX_DATASET
 wn_dataset_agg = wn_dataset.groupBy(col("id").alias("id_ref")).agg(collect_list("real_id").alias("related_videos"))
