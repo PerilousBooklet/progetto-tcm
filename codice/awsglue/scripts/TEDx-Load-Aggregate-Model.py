@@ -92,6 +92,8 @@ details_dataset = spark.read \
 	.option("escape", "\"") \
 	.csv(details_dataset_path)
 
+details_dataset = details_dataset.drop(how="any")
+
 details_dataset = details_dataset.select(col("id").alias("id_ref"),
 	col("description"),
 	col("duration"),
@@ -119,6 +121,8 @@ tedx_dataset_agg_img.printSchema()
 ## READ WATCH NEXT DATASET
 wn_dataset_path = "s3://pg9-tedx-2024-data/related_videos.csv"
 wn_dataset = spark.read.option("header","true").csv(wn_dataset_path)
+
+wn_dataset = wn_dataset.drop_duplicates()
 
 wn_real_id = wn_dataset.select(col("internalId").alias("internal"), col("id").alias("real_id")).distinct()
 
