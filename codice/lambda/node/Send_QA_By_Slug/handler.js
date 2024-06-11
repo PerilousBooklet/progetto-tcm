@@ -1,3 +1,5 @@
+// https://i40ttg98rf.execute-api.us-east-1.amazonaws.com/default/Get_QA_by_Slug
+
 const connect_to_db = require('./db');
 
 // GET BY TALK HANDLER
