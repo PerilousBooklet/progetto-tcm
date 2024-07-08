@@ -1,1 +1,0 @@
-/mnt/BigData/_GitRepos/progetto-tcm/codice/lambda/node/Talk.js
