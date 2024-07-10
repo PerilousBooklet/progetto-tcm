@@ -4,8 +4,6 @@
 import sys
 import json
 import pyspark
-import pymongo
-from pymongo import MongoClient
 from pyspark.sql.functions import col, collect_list, array_join
 from pyspark.sql.types import *
 
@@ -146,8 +144,6 @@ wn_dataset_views = wn_dataset.select(col("real_id"), col("viewedCount").alias("v
 tedx_dataset_agg_img_wn_views = tedx_dataset_agg_img_wn.join(wn_dataset_views, tedx_dataset_agg_img_wn._id == wn_dataset_views.real_id, "left") \
 	.drop("real_id")
 
-tedx_dataset_agg_img_wn_views.add("qa", ArrayType(StructType([StructField("q", StringType()), StructField("a", ArrayType(StringType(), True))]), True), True)
-
 write_mongo_options = {
 	"connectionName": "pg9-mongodb-connection",
 	"database": "unibg_tedx_2024",
@@ -158,17 +154,3 @@ from awsglue.dynamicframe import DynamicFrame
 tedx_dataset_dynamic_frame = DynamicFrame.fromDF(tedx_dataset_agg_img_wn_views, glueContext, "nested")
 
 glueContext.write_dynamic_frame.from_options(tedx_dataset_dynamic_frame, connection_type="mongodb", connection_options=write_mongo_options)
-
-client = MongoClient("mongodb+srv://aws:aws@cluster0.khbnw71.mongodb.net/")
-
-db = client["unibg_tedx_2024"]
-collection = db["tedx_data"]
-
-collection.aggregate( [
-	{
-		$addFields: {
-			
-		}
-	}
-]
-)
