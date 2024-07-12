@@ -1,4 +1,4 @@
-// https://dpegxbbnpg.execute-api.us-east-1.amazonaws.com/default/Get_Talks_By_Slug
+// https://i40ttg98rf.execute-api.us-east-1.amazonaws.com/default/Get_QA_by_Slug
 
 const connect_to_db = require('./db');
 
@@ -6,7 +6,7 @@ const connect_to_db = require('./db');
 
 const talk = require('./Talk');
 
-module.exports.get_by_slug = (event, context, callback) => {
+module.exports.add_by_slug = (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
     console.log('Received event:', JSON.stringify(event, null, 2));
     let body = {}
@@ -14,7 +14,7 @@ module.exports.get_by_slug = (event, context, callback) => {
         body = JSON.parse(event.body)
     }
     // set default
-    if(!body.slug) {
+    if(!body.tag) {
         callback(null, {
                     statusCode: 500,
                     headers: { 'Content-Type': 'text/plain' },
@@ -30,8 +30,8 @@ module.exports.get_by_slug = (event, context, callback) => {
     }
     
     connect_to_db().then(() => {
-        console.log('=> get specific talk by slug');
-        talk.find({slug: body.slug})
+        console.log('=> get_all talks');
+        talk.find({tags: body.tag})
             .skip((body.doc_per_page * body.page) - body.doc_per_page)
             .limit(body.doc_per_page)
             .then(talks => {
