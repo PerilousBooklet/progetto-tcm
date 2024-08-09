@@ -1,4 +1,4 @@
-# https://1sw04niaw3.execute-api.us-east-1.amazonaws.com/default/Add_QA_By_Slug
+# https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug
 
 # Esempio di output
 # return {
