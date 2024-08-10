@@ -16,6 +16,7 @@
 # dove 0 = false, 1 = true
 
 import json
+import string
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -35,45 +36,32 @@ def lambda_handler(event, context):
 	
 	print("event_body", type(event_body), event_body)
 
-	try:
-		client = MongoClient(uri, server_api=ServerApi('1'))
-	except Exception:
-		print("Errore connessione")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nella connessione al server MongoDB"
-		}
+	client = MongoClient(uri, server_api=ServerApi('1'))
 
-	try:
-		db = client["unibg_tedx_2024"]
-		collection = db["tedx_data"]
-	except Exception:
-		print("Errore collezione")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nell'estrazione della collezione"
-		}
+	db = client["unibg_tedx_2024"]
+	collection = db["tedx_data"]
 
-	try:
-		tedx_by_slug:dict = collection.find_one({"slug": event_body["slug"]})
+	tedx_by_slug:dict = collection.find_one({"slug": event_body["slug"]}) # type: ignore
 
-		tedx_by_slug["QA"].append([event_body["question"], [event_body["answer"]]])
+	print(tedx_by_slug)
 
-		update_result = collection.update_one({"slug": event_body["slug"]}, {"QA": tedx_by_slug["QA"]}, upsert=False)
-	except Exception:
-		print("Errore")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nell'esecuzione della query"
-		}
+	if "QA" in tedx_by_slug:
+		tedx_by_slug["QA"].append([event_body["question"], event_body["answer"]])
+	else:
+		tedx_by_slug["QA"] = [[event_body["question"], event_body["answer"]]]
+	
+	query = {"slug": event_body["slug"]}
+	setter = { "$set" : {"QA": tedx_by_slug["QA"]}}
+
+	update_result = collection.update_one(query, setter, upsert=False)
+
+	print(tedx_by_slug)
 
 	# se come risposta si ha null, buol dire che il json è invalido
 	print("Successo")
+	print(update_result)
 	return {
 		'statusCode': 200,
 		'headers': {'Content-Type': 'text/plain'},
-		'body': "Success",
+		'body': json.dumps({"result": "ok"}),
 	}
