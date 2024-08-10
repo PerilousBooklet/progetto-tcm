@@ -39,7 +39,7 @@ def lambda_handler(event, context):
 		}
 
 	try:
-		cursor = collection.find_one(event_body)
+		cursor = collection.find_one({"slug": event_body["slug"]})
 	except Exception:
 		print("Errore")
 		return {

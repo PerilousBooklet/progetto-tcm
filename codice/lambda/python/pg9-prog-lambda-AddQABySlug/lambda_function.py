@@ -57,7 +57,11 @@ def lambda_handler(event, context):
 		}
 
 	try:
-		cursor = collection.update_one({}, {}, upsert=False)
+		tedx_by_slug:dict = collection.find_one({"slug": event_body["slug"]})
+
+		tedx_by_slug["QA"].append([event_body["question"], [event_body["answer"]]])
+
+		update_result = collection.update_one({"slug": event_body["slug"]}, {"QA": tedx_by_slug["QA"]}, upsert=False)
 	except Exception:
 		print("Errore")
 		return {
@@ -68,9 +72,8 @@ def lambda_handler(event, context):
 
 	# se come risposta si ha null, buol dire che il json è invalido
 	print("Successo")
-	print("Stampo cursore\n", json.dumps(cursor))
 	return {
 		'statusCode': 200,
 		'headers': {'Content-Type': 'text/plain'},
-		'body': json.dumps(cursor),
+		'body': "Success",
 	}
