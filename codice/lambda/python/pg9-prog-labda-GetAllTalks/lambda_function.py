@@ -23,7 +23,7 @@ def lambda_handler(event, context):
 	db = client["unibg_tedx_2024"]
 	collection = db["tedx_data"]
 
-	data_projection = {"_id":False,"slug":False,"speakers":False,"url":False,"duration":False,"publishedAt":False,"tags":False,"related_videos":False,"views":False,"QA":False}
+	data_projection = {"_id":False,"speakers":False,"url":False,"duration":False,"publishedAt":False,"tags":False,"related_videos":False,"views":False,"QA":False}
 	cursor:pymongo.cursor.Cursor = collection.find({}, data_projection)
 
 	final_json:dict = {"request_time": int(time.time())}
@@ -31,6 +31,7 @@ def lambda_handler(event, context):
 
 	for tedx in cursor:
 		# compressione dati
+		# L'url è calcolabile tramite lo slug, questo è automatico
 		# Questo risparmia 33 Bytes per entrata, ci sono 6362 (2024-08-11_17-49-00), quindi si risparmiano 209946 Bytes ovvero 210 KiloBytes (1000)
 		tedx["img_url"] = tedx["img_url"].removeprefix("https://pe.tedcdn.com/images/ted/")
 
