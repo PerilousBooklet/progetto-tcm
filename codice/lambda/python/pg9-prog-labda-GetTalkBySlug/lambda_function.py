@@ -17,36 +17,14 @@ def lambda_handler(event, context):
 
 	event_body = json.loads(event["body"])
 
-	try:
-		client = MongoClient(uri, server_api=ServerApi('1'))
-	except Exception:
-		print("Errore connessione")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nella connessione al server MongoDB"
-		}
+	client = MongoClient(uri, server_api=ServerApi('1'))
 
-	try:
-		db = client["unibg_tedx_2024"]
-		collection = db["tedx_data"]
-	except Exception:
-		print("Errore collezione")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nell'estrazione della collezione"
-		}
+	db = client["unibg_tedx_2024"]
+	collection = db["tedx_data"]
 
-	try:
-		cursor = collection.find_one({"slug": event_body["slug"]})
-	except Exception:
-		print("Errore")
-		return {
-			"statusCode": 500,
-			"headers": {"Content-Type": "text/plain"},
-			"body": "Errore nell'esecuzione della query"
-		}
+	query = {"slug": event_body["slug"]}
+
+	cursor = collection.find_one(query)
 
 	return {
 		'statusCode': 200,

@@ -41,9 +41,11 @@ def lambda_handler(event, context):
 	db = client["unibg_tedx_2024"]
 	collection = db["tedx_data"]
 
-	tedx_by_slug:dict = collection.find_one({"slug": event_body["slug"]}) # type: ignore
+	data_projection = {"_id":False,"slug":False,"speakers":False,"title":False,"url":False,"duration":False,"publishedAt":False,"tags":False,"img_url":False,"related_videos":False,"views":False}
 
-	print(tedx_by_slug)
+	tedx_query = {"slug": event_body["slug"]}
+
+	tedx_by_slug:dict = collection.find_one(tedx_query, data_projection) # type: ignore
 
 	if "QA" in tedx_by_slug:
 		tedx_by_slug["QA"].append([event_body["question"], event_body["answer"]])
@@ -55,11 +57,8 @@ def lambda_handler(event, context):
 
 	update_result = collection.update_one(query, setter, upsert=False)
 
-	print(tedx_by_slug)
-
 	# se come risposta si ha null, buol dire che il json è invalido
 	print("Successo")
-	print(update_result)
 	return {
 		'statusCode': 200,
 		'headers': {'Content-Type': 'text/plain'},
