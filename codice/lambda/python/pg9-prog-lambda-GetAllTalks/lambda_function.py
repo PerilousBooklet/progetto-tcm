@@ -1,4 +1,4 @@
-# https://2qqdm4il69.execute-api.us-east-1.amazonaws.com/default/pg9-prog-labda-GetAllTalks
+# https://8hqpqi3mm7.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetAllTalks
 
 # Esempio di output
 # return {
@@ -30,11 +30,6 @@ def lambda_handler(event, context):
 	counter:int = 0
 
 	for tedx in cursor:
-		# compressione dati
-		# L'url è calcolabile tramite lo slug, questo è automatico
-		# Questo risparmia 33 Bytes per entrata, ci sono 6362 (2024-08-11_17-49-00), quindi si risparmiano 209946 Bytes ovvero 210 KiloBytes (1000)
-		tedx["img_url"] = tedx["img_url"].removeprefix("https://pe.tedcdn.com/images/ted/")
-
 		final_json[counter] = tedx
 		counter = counter + 1
 

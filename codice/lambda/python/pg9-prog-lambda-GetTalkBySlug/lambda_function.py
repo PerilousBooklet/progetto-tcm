@@ -1,4 +1,4 @@
-# https://e6ka8k7lm5.execute-api.us-east-1.amazonaws.com/pg9-prog-labda-GetTalkBySlug
+# https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug
 
 # Esempio di output
 # return {
