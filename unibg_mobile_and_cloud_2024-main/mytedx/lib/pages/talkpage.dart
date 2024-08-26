@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
-import 'answer.dart';
+import 'questionpage.dart';
+import 'answerpage.dart';
 
-class Talk extends StatelessWidget {
-  const Talk({super.key});
+class TalkPage extends StatelessWidget {
+  const TalkPage({super.key});
   
   final String title = "Talk Page";
   
@@ -22,14 +22,14 @@ class Talk extends StatelessWidget {
               TextButton(
                 child: const Text('Prepare a Quiz'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Question()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const QuestionPage()));
                 },
               ),
               // Answer Page
               TextButton(
                 child: const Text('Answer a Quiz'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Answer()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AnswerPage()));
                 },
               ),
             ],

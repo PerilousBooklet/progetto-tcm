@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/talk.dart';
+import 'pages/talkpage.dart';
 
 // TODO: aggiungi pagina (si ricorda dello username)
 // TODO: aggiungi tasto logout
@@ -93,33 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Center(
           child: Text('APP BAR'),
         ),
-        // Search Bar inside App Bar
-        //title: Container(
-        //  // Add padding around the search bar
-        //  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        //  // Use a Material design search bar
-        //  child: TextField(
-        //    controller: _searchController,
-        //    decoration: InputDecoration(
-        //      hintText: 'Search...',
-        //      // Add a clear button to the search bar
-        //      suffixIcon: IconButton(
-        //        icon: Icon(Icons.clear, color: Colors.black,),
-        //        onPressed: () => _searchController.clear(),
-        //      ),
-        //      // Add a search icon or button to the search bar
-        //      prefixIcon: IconButton(
-        //        icon: Icon(Icons.search, color: Colors.black,),
-        //        onPressed: () {
-        //          // Perform the search here
-        //        },
-        //      ),
-        //      // border: OutlineInputBorder(
-        //      //   borderRadius: BorderRadius.circular(20.0),
-        //      // ),
-        //    ),
-        //  ),
-        //)
       ),
       
       // Main page body
@@ -153,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               child: const Text("Button"),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Talk()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TalkPage()));
               },
             ),
           ],
