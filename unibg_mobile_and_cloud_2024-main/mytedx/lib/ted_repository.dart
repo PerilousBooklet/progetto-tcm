@@ -16,7 +16,15 @@ class TedRepository {
     );
 
     final responseBodyParsed = json.decode(response.body);
+    
+    // var responseBodyMapped = responseBodyParsed
+    //     .map<TalkMainPage>((json) => TalkMainPage.fromJSON(json))
+    //     .toList();
 
+    // for (var element in responseBodyMapped) {
+    //   print(element.toString());
+    // }
+    
     return responseBodyParsed
         .map<TalkMainPage>((json) => TalkMainPage.fromJSON(json))
         .toList();

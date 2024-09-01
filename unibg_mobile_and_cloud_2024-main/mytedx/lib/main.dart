@@ -142,15 +142,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            // WIP: List of talks
+            // List of talks
             TalksList(),
-            
-            TextButton(
-              child: const Text("Button"),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TalkPage()));
-              },
-            ),
           ],
         ),
       ),

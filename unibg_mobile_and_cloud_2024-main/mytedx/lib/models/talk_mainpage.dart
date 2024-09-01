@@ -10,4 +10,17 @@ class TalkMainPage {
     description = (jsonMap['description'] ?? ""),
     img_url = (jsonMap['img_url'] ?? "");
 
+  Map<String, dynamic> toJson() => {
+    "slug": slug,
+    "title": title,
+    "description": description,
+    "img_url": img_url,
+  };
+  
+  @override
+    String toString() {
+      // TODO: implement toString
+      String dati = this.slug + " | " + this.title + " | " + this.description + " | " + this.img_url;
+      return dati;
+    }
 }
