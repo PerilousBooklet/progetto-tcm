@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
-class QuestionPage extends StatelessWidget {
+class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
   
+  @override
+  State<QuestionPage> createState() => _QuestionPageState();
+}
+
+class _QuestionPageState extends State<QuestionPage> {
   final String title = "Question Page";
+  bool isPressed = false;
   
   @override
   Widget build(BuildContext context) {
@@ -18,12 +24,8 @@ class QuestionPage extends StatelessWidget {
           child: Column(
           children: [
             // Input Text Field
-            Container(
-              //decoration: BoxDecoration(
-              //  border: Border.all(color: Colors.tealAccent, width: 1.0),
-              //),
-              child: const Padding(
-                padding: EdgeInsets.all(16),
+            Padding(
+                padding: const EdgeInsets.all(16),
                 child: SizedBox(
                   width: 400.0,
                   height: 80.0,
@@ -32,28 +34,31 @@ class QuestionPage extends StatelessWidget {
                     keyboardType: TextInputType.multiline,
                   ),
                 ),
-              )
-            ),
-            // Choice Options
-            // TODO: creazione domanda, input field (bello grande, rettangolare), ci sono due tasti vero/falso (verde/rosso), di base il vero e' la risposta corretta, per cambiare il tasto corrisp. alla risposta si clicca (diventa verde e l'altro diventa rosso)
-            // TODO: risposta: due tasti (vero/falso)
-            // TODO: due bottoni, Salva e Elimina
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(8),
+              ),
+            // True/False Buttons
+            //Center(
+              Padding(
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
-                      onPressed: null,
-                      child: Text(
+                      onPressed: () {
+                        setState(() {
+                          isPressed = !isPressed;
+                          
+                        });
+                      },
+                      style: TextButton.styleFrom(backgroundColor: isPressed ? Colors.teal : Colors.transparent),
+                      child: const Text(
                         'True',
                         style: TextStyle(fontSize: 25),
                       ),
                     ),
                     TextButton(
                       onPressed: null,
-                      child: Text(
+                      style: TextButton.styleFrom(backgroundColor: isPressed ? Colors.transparent : Colors.teal),
+                      child: const Text(
                         'False',
                         style: TextStyle(fontSize: 25),
                       ),
@@ -61,7 +66,25 @@ class QuestionPage extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            //),
+            // Save/Delete Buttons
+            //Center(
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                    children: [
+                      TextButton(
+                        child: const Text('Save', style: TextStyle(fontSize: 25),),
+                        onPressed: null,
+                      ),
+                      TextButton(
+                        child: const Text('Delete', style: TextStyle(fontSize: 25),),
+                        onPressed: null,
+                      )
+                    ],
+                  ),
+                )
+              //),
           ],
         ),
         ),

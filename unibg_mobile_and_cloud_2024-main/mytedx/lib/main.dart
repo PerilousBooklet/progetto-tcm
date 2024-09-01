@@ -1,48 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'pages/talkpage.dart';
 import 'pages/loginpage.dart';
-import 'package:http/http.dart' as http;
-import 'package:mytedx/models/talk_byslug.dart';
+import 'ted_repository.dart';
 import 'package:mytedx/models/talk_mainpage.dart';
+import 'talks_list.dart';
 
-// TODO: data sync once every app start and once every 30min, with swipe down from top of ListView
+// TODO: data sync once every app start
 // TODO: salvare i dati nel JSON interno
 
 void main() {
   runApp(const MyApp());
-}
-
-class TedRepository {
-  TedRepository();
-
-    Future<List<TalkMainPage>?> getTalkList() async {
-    var response = await http.get(
-      Uri.parse("https://8hqpqi3mm7.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetAllTalks"),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-
-    final responseBodyParsed = json.decode(response.body);
-
-    return responseBodyParsed["results"]
-        .map<TalkMainPage>((json) => TalkMainPage.fromJSON(json))
-        .toList();
-  }
-
-  Future<TalkBySlug> getSinglePokemon(String slug) async {
-    var response = await http.get(
-      Uri.parse("https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug"),
-      headers: {
-        'Content-Type': 'application/json',
-        'body': slug
-      },
-    );
-
-    return TalkBySlug.fromJSON(json.decode(response.body));
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -73,22 +40,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'TedX Quiz'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-  
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
   
   final String title;
   
@@ -99,14 +57,15 @@ class MyHomePage extends StatefulWidget {
 // This is the type used by the popup menu below.
 enum SampleItem { itemOne, itemTwo, itemThree }
 
+// List of all talks
+TedRepository tedrepo = TedRepository();
+final Future<List<TalkMainPage>?> talks = tedrepo.getTalkList();
+
 // Main
 class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController _searchController = TextEditingController();
   SampleItem? selectedItem; // Used for the PopupMenu
-  
-  // List of all talks
-  // ...
   
   @override
   Widget build(BuildContext context) {
@@ -152,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // App bar title
         title: const Center(
-          child: Text('APP BAR'),
+          child: Text('TedX Quiz'),
         ),
       ),
       
@@ -184,6 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             // WIP: List of talks
+            TalksList(),
+            
             TextButton(
               child: const Text("Button"),
               onPressed: () {
