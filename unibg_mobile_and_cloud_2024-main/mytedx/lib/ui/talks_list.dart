@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'models/talk_mainpage.dart';
-import 'ted_repository.dart';
+import 'package:mytedx/models/talk_mainpage.dart';
+import 'package:mytedx/ted_repository.dart';
+import 'package:mytedx/ui/talk_element.dart';
 
 // class TalksList extends StatefulWidget {
 //   const TalksList({super.key});
@@ -11,7 +12,7 @@ import 'ted_repository.dart';
 class TalksList extends StatelessWidget{
   Widget build(BuildContext context) {
     // ?
-    // TedRepository ted_repo = TedRepository();
+    TedRepository ted_repo = TedRepository();
     // Future<List<TalkMainPage>>talks_list_future = ted_repo.getTalkList();
     // List<TalkMainPage> talks_list = List.empty();
     // talks_list_future.then((result){
@@ -52,7 +53,19 @@ class TalksList extends StatelessWidget{
     // );
     // ?
     return FutureBuilder<List<TalkMainPage>> (
-      future: TedRepository.getTalkList(),
+      future: ted_repo.getTalkList(),
+      builder: (_, AsyncSnapshot<List<TalkMainPage>> snapshot) { 
+        if(snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index){
+                return ;
+              }
+              );
+          }
+        }
+      },
     );
   }
 }

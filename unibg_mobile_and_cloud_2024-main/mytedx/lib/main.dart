@@ -3,7 +3,7 @@ import 'pages/talkpage.dart';
 import 'pages/loginpage.dart';
 import 'ted_repository.dart';
 import 'package:mytedx/models/talk_mainpage.dart';
-import 'talks_list.dart';
+import 'ui/talks_list.dart';
 
 // TODO: data sync once every app start
 // TODO: salvare i dati nel JSON interno
