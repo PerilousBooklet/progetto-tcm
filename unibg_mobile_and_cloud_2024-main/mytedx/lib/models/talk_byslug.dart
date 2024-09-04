@@ -1,5 +1,5 @@
 class TalkBySlug {
-  final String _id;
+  final String id;
   final String slug;
   final String speakers;
   final String title;
@@ -14,7 +14,7 @@ class TalkBySlug {
   final String QA;
 
   TalkBySlug.fromJSON(Map<String, dynamic> jsonMap)
-      : _id = jsonMap['_id'],
+      : id = jsonMap['_id'],
         slug = jsonMap['slug'],
         speakers = jsonMap['speakers'],
         title = jsonMap['title'],
