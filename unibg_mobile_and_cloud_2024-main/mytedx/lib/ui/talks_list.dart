@@ -83,7 +83,7 @@ class TalksList extends StatelessWidget {
                         )));
           }
         }
-        return const Text("SAD");
+        return const Text("Attendi. Download dati in corso");
       },
     );
   }
