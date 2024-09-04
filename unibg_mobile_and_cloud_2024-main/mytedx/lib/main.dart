@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           false, // Hide debug banner (located in top right corner of appbar)
       title: 'TedX Quiz',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MainPage(),

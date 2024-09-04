@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytedx/models/talk_mainpage.dart';
 import 'package:mytedx/ted_repository.dart';
+import 'package:mytedx/pages/questionpage.dart';
 
 // class TalksList extends StatefulWidget {
 //   const TalksList({super.key});
@@ -9,7 +10,12 @@ import 'package:mytedx/ted_repository.dart';
 // }
 
 class TalksList extends StatelessWidget {
-  TalksList({super.key});
+  const TalksList({super.key});
+
+  gotoDomande(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const QuestionPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +35,13 @@ class TalksList extends StatelessWidget {
                     itemBuilder: (context, index) => Card(
                           margin: const EdgeInsets.all(10),
                           child: ListTile(
+                            onTap: () => gotoDomande(context),
                             contentPadding: const EdgeInsets.all(10),
                             title: Text(snapshot.data![index].title),
                             subtitle: Text(snapshot.data![index].description),
                             trailing: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                child: Image.network(
-                                    snapshot.data![index].img_url),
-                              ),
+                              child:
+                                  Image.network(snapshot.data![index].img_url),
                             ),
                           ),
                         )));
