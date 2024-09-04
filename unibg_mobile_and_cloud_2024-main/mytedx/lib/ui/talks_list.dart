@@ -9,6 +9,11 @@ import 'package:mytedx/ted_repository.dart';
 // }
 
 class TalksList extends StatelessWidget {
+  final _scrollController = ScrollController();
+
+  TalksList({super.key});
+
+  @override
   Widget build(BuildContext context) {
     // ?
     TedRepository ted_repo = TedRepository();
@@ -56,21 +61,22 @@ class TalksList extends StatelessWidget {
       builder: (_, AsyncSnapshot<List<TalkMainPage>> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => Card(
-                      margin: const EdgeInsets.all(10),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(10),
-                        title: Text(snapshot.data![index].title),
-                        subtitle: Text(snapshot.data![index].description),
-                      ),
-                    ));
+            return Expanded(
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(10),
+                            title: Text(snapshot.data![index].title),
+                            subtitle: Text(snapshot.data![index].description),
+                          ),
+                        )));
           }
         }
-          return const Text("SAD");
+        return const Text("SAD");
       },
     );
   }
