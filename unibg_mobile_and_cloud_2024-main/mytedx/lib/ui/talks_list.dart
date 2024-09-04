@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mytedx/models/talk_mainpage.dart';
 import 'package:mytedx/ted_repository.dart';
-import 'package:mytedx/ui/talk_element.dart';
 
 // class TalksList extends StatefulWidget {
 //   const TalksList({super.key});
@@ -9,7 +8,7 @@ import 'package:mytedx/ui/talk_element.dart';
 //   State<TalksList> createState() => _TalkListState();
 // }
 
-class TalksList extends StatelessWidget{
+class TalksList extends StatelessWidget {
   Widget build(BuildContext context) {
     // ?
     TedRepository ted_repo = TedRepository();
@@ -21,7 +20,7 @@ class TalksList extends StatelessWidget{
     //     print(result);
     //   });
     // });
-    
+
     // ?
     // return ListView.builder(
     //   padding: const EdgeInsets.all(8),
@@ -52,19 +51,26 @@ class TalksList extends StatelessWidget{
     //   }
     // );
     // ?
-    return FutureBuilder<List<TalkMainPage>> (
+    return FutureBuilder<List<TalkMainPage>>(
       future: ted_repo.getTalkList(),
-      builder: (_, AsyncSnapshot<List<TalkMainPage>> snapshot) { 
-        if(snapshot.connectionState == ConnectionState.done) {
+      builder: (_, AsyncSnapshot<List<TalkMainPage>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index){
-                return ;
-              }
-              );
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) => Card(
+                      margin: const EdgeInsets.all(10),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(10),
+                        title: Text(snapshot.data![index].title),
+                        subtitle: Text(snapshot.data![index].description),
+                      ),
+                    ));
           }
         }
+          return const Text("SAD");
       },
     );
   }
