@@ -72,6 +72,13 @@ class TalksList extends StatelessWidget {
                             contentPadding: const EdgeInsets.all(10),
                             title: Text(snapshot.data![index].title),
                             subtitle: Text(snapshot.data![index].description),
+                            trailing: InkWell(
+                              onTap: () {},
+                              child: Container(
+                                child: Image.network(
+                                    snapshot.data![index].img_url),
+                              ),
+                            ),
                           ),
                         )));
           }
