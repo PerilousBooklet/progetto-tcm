@@ -22,11 +22,11 @@ class TalkBySlug {
     description = jsonMap['description'];
     duration = jsonMap['duration'];
     publishedAt = jsonMap['publishedAt'];
-    if (jsonMap['QA'] == null) {
-      tags = [];
-    } else {
-      tags = arrayDecoder(jsonMap[""]);
-    }
+    // if (jsonMap['tags'] == null) {
+    //   tags = [];
+    // } else {
+    //   tags = arrayDecoder(jsonMap[""]);
+    // }
 
     img_url = jsonMap['img_url'];
     // related_videos = arrayDecoder(jsonMap[""]);

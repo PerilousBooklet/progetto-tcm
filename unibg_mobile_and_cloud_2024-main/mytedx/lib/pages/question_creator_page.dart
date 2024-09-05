@@ -57,7 +57,7 @@ class _QuestionCreatorPageState extends State<QuestionCreatorPage> {
             padding: const EdgeInsets.all(8.0),
             children: [
               TextField(
-                maxLines: 20,
+                maxLines: 10,
                 controller: _controller,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
