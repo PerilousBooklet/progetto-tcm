@@ -13,15 +13,16 @@
 Nome: ???
 Funzioni:
 - Account (AWS Cognito)
-	- Like (?0-5?)
+	- Like
 	- Commenti
+	- Permettere agli utenti di collegare fonti o approfondimenti
 	- Tracking dei TED guardati
 		- Anche a che punto si è arrivati
 	- Iscrizioni ad argomenti
 		- Invio di notifiche (AWS SNS)
 	- Suggerimenti in base alle preferenze (AWS Personalize)
 - Alla fine del video dai il prossimo video da guardare
-- Download (?AWS CloudFront?)
+- Download (AWS CloudFront)
 
 ## Uso di servizi specifici
 AWS Cognito: gestione degli account, con supporto di collegamento tra servizi (Google, Apple, Facebook, etc)
@@ -32,8 +33,5 @@ AWS Personalize: Servizio di suggerimenti in base alle preferenze dell'utente
 Amazon S3: Storage dei dati
 Amazon Aurora/DynamoDB: Database per tenere i contenuti (Da scegliere il tipo di DB)
 React/Flutter: Framework App mobile
-Github/Lab: Storage del codice e versionamento
+Github: Storage del codice e versionamento
 Draw.io: Creazione diagramma grafico
-
-## Opzioni
-l'utente si iscrive a degli argomenti, notifiche push per avvisarlo. trascrizione del video per avere + tag
