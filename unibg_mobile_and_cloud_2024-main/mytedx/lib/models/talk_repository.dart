@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'models/talk.dart';
+import 'talk.dart';
 
 Future<List<Talk>> initEmptyList() async {
   Iterable list = json.decode("[]");

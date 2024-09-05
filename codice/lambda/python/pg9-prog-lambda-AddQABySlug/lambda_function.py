@@ -10,8 +10,7 @@
 # Formato richiesta nel body di esempio
 # {
 # 	"slug": "slug_data",
-# 	"question": "unique_question",
-# 	"answer": <"0"/"1">,
+# 	"question": "<"0"/"1">unique_question",
 # }
 # dove 0 = false, 1 = true
 
@@ -26,7 +25,7 @@ def lambda_handler(event, context):
 
 	event_body = json.loads(event["body"])
 
-	if event_body["answer"] != "0" and event_body["answer"] != "1":
+	if event_body["question"][0] != "0" and event_body["question"][0] != "1":
 		print("Errore inserimento dati")
 		return {
 			"statusCode": 500,
@@ -48,9 +47,9 @@ def lambda_handler(event, context):
 	tedx_by_slug:dict = collection.find_one(tedx_query, data_projection) # type: ignore
 
 	if "QA" in tedx_by_slug:
-		tedx_by_slug["QA"].append([event_body["question"], event_body["answer"]])
+		tedx_by_slug["QA"].append(event_body["question"])
 	else:
-		tedx_by_slug["QA"] = [[event_body["question"], event_body["answer"]]]
+		tedx_by_slug["QA"] = [event_body["question"]]
 	
 	query = {"slug": event_body["slug"]}
 	setter = { "$set" : {"QA": tedx_by_slug["QA"]}}

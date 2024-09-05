@@ -17,7 +17,9 @@ class _ProfilePage extends State<ProfilePage> {
 
   loginPress() {
     setState(() {
-      _isTextFieldEnabled = false;
+      if (_controller.text != "") {
+        _isTextFieldEnabled = false;
+      }
     });
   }
 

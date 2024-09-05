@@ -12,15 +12,15 @@ curl --json '{}' "https://8hqpqi3mm7.execute-api.us-east-1.amazonaws.com/default
 # Test di pg9-prog-lambda-AddQABySlug
 #
 # Caso risposta vera
-curl --json '{"slug": "sarah_lewis_embrace_the_near_win","question": "unique_question","answer": "1"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-1.json"
+curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","question": "1unique_question"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-1.json"
 
 # Caso risposta falso
-curl --json '{"slug": "sarah_lewis_embrace_the_near_win","question": "unique_question","answer": "0"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-0.json"
+curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","question": "0unique_question"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-0.json"
 
 # Caso risposta invalida
-curl --json '{"slug": "sarah_lewis_embrace_the_near_win","question": "unique_question","answer": "dQw4w9WgXcQ"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-err.json"
+curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","question": "unique_question"}' "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug" > "/tmp/pg9-api-checker/AddQABySlug-err.json"
 
 #
 # Test di pg9-prog-lambda-GetTalkBySlug
 #
-curl --json '{"slug": "sarah_lewis_embrace_the_near_win","question": "unique_question"}' "https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug" > "/tmp/pg9-api-checker/GetTalkBySlug.json"
+curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","question": "unique_question"}' "https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug" > "/tmp/pg9-api-checker/GetTalkBySlug.json"
