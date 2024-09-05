@@ -5,7 +5,7 @@ class QuestionAnswerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(
-      //title: const Text('TedQuiz'),
+      title: const Text('TedQuiz'),
     ),
     body: Expanded(
       child: ListView(
