@@ -23,4 +23,4 @@ curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","que
 #
 # Test di pg9-prog-lambda-GetTalkBySlug
 #
-curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets","question": "unique_question"}' "https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug" > "/tmp/pg9-api-checker/GetTalkBySlug.json"
+curl --json '{"slug": "irina_kareva_math_can_help_uncover_cancer_s_secrets"}' "https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug" > "/tmp/pg9-api-checker/GetTalkBySlug.json"

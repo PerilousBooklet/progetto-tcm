@@ -28,6 +28,23 @@ class TedRepository {
             "https://kx7pqnr9eh.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-GetTalkBySlug"),
         headers: {'Content-Type': "application/json"},
         body: json.encode({'slug': slug}));
-    return TalkBySlug.fromJSON(json.decode(response.body));
+
+    TalkBySlug talkBySlug = TalkBySlug.fromJSON(json.decode(response.body));
+
+    if (talkBySlug.QA.isEmpty) {
+      talkBySlug.QA = [""];
+    }
+
+    return talkBySlug;
+  }
+
+  Future<String> sendQA(String slug, String qa) async {
+    var response = await http.post(
+        Uri.parse(
+            "https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug"),
+        headers: {'Content-Type': "application/json"},
+        body: json.encode({'slug': slug, 'question': qa}));
+
+    return response.body;
   }
 }

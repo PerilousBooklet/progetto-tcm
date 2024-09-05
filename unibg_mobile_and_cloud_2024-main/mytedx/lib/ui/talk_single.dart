@@ -15,8 +15,12 @@ class TalkSingle extends StatelessWidget {
   }
 
   goToQuestionCreator(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => QuestionCreatorPage()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => QuestionCreatorPage(
+                  slug: slug,
+                )));
   }
 
   @override
@@ -39,6 +43,7 @@ class TalkSingle extends StatelessWidget {
                     ),
                     Image.network(snapshot.data!.img_url),
                     Text("Durata: ${snapshot.data!.duration}s"),
+                    Text("Pubblicato il: ${snapshot.data!.publishedAt}"),
                     Text("Speakers: ${snapshot.data!.speakers}"),
                     Text(
                       snapshot.data!.description,
@@ -61,6 +66,8 @@ class TalkSingle extends StatelessWidget {
                     )
                   ],
                 ));
+          } else {
+            return const Text("Errore");
           }
         }
         return const Text("Attendi. Download dati in corso");

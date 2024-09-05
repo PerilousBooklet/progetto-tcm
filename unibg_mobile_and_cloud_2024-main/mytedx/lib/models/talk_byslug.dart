@@ -22,11 +22,20 @@ class TalkBySlug {
     description = jsonMap['description'];
     duration = jsonMap['duration'];
     publishedAt = jsonMap['publishedAt'];
-    tags = [""];
+    if (jsonMap['QA'] == null) {
+      tags = [];
+    } else {
+      tags = arrayDecoder(jsonMap[""]);
+    }
+
     img_url = jsonMap['img_url'];
-    related_videos = [""];
+    // related_videos = arrayDecoder(jsonMap[""]);
     views = jsonMap['views'];
-    QA = QAdecoder(jsonMap['QA']);
+    if (jsonMap['QA'] == null) {
+      QA = [];
+    } else {
+      QA = arrayDecoder(jsonMap['QA']);
+    }
   }
 
   @override
@@ -34,13 +43,12 @@ class TalkBySlug {
     return "$id, $slug, $speakers, $title, $url, $description, $duration, $publishedAt, $tags, $img_url, $related_videos, $views, $QA";
   }
 
-  List<String> QAdecoder(List<dynamic> QAMap) {
+  List<String> arrayDecoder(List<dynamic> QAMap) {
     List<String> finalMap = [];
 
     for (var element in QAMap) {
       finalMap.add(element);
     }
-
     return finalMap;
   }
 }

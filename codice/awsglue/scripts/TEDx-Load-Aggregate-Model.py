@@ -1,156 +1,67 @@
-###### TEDx-Load-Aggregate-Model
-######
+# https://zbjyl85kp6.execute-api.us-east-1.amazonaws.com/default/pg9-prog-lambda-AddQABySlug
 
-import sys
+# Esempio di output
+# return {
+# 		"statusCode": 200,
+# 		"headers": {"Content-Type": "application/json"},
+# 		"body": json.dumps(event)
+# 	}
+
+# Formato richiesta nel body di esempio
+# {
+# 	"slug": "slug_data",
+# 	"question": "<"0"/"1">unique_question",
+# }
+# dove 0 = false, 1 = true
+
 import json
-import pyspark
-from pyspark.sql.functions import col, collect_list, array_join
-from pyspark.sql.types import *
+import string
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
-from awsglue.transforms import *
-from awsglue.utils import getResolvedOptions
-from pyspark.context import SparkContext
-from awsglue.context import GlueContext
-from awsglue.job import Job
+uri = "mongodb+srv://aws:aws@cluster0.khbnw71.mongodb.net/?appName=Cluster0"
 
+def lambda_handler(event, context):
 
-##### FROM FILES
-tedx_dataset_path = "s3://p9-prog-data/final_list.csv"
+	event_body = json.loads(event["body"])
 
-###### READ PARAMETERS
-args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+	if event_body["question"][0] != "0" and event_body["question"][0] != "1":
+		print("Errore inserimento dati")
+		return {
+			"statusCode": 500,
+			"headers": {"Content-Type": "text/plain"},
+			"body": "Errore, il campo answer non è 0 o 1"
+		}
+	
+	print("event_body", type(event_body), event_body)
 
-##### START JOB CONTEXT AND JOB
-sc = SparkContext()
+	client = MongoClient(uri, server_api=ServerApi('1'))
 
+	db = client["unibg_tedx_2024"]
+	collection = db["tedx_data"]
 
-glueContext = GlueContext(sc)
-spark = glueContext.spark_session
+	data_projection = {"_id":False,"slug":False,"speakers":False,"title":False,"url":False,"duration":False,"publishedAt":False,"tags":False,"img_url":False,"related_videos":False,"views":False}
 
+	tedx_query = {"slug": event_body["slug"]}
 
+	tedx_by_slug:dict = collection.find_one(tedx_query, data_projection) # type: ignore
 
-job = Job(glueContext)
-job.init(args['JOB_NAME'], args)
+	print(tedx_by_slug)
 
+	if "QA" in tedx_by_slug:
+		tedx_by_slug["QA"].append(event_body["question"])
+	else:
+		tedx_by_slug["QA"] = [event_body["question"]]
+	
+	query = {"slug": event_body["slug"]}
+	setter = { "$set" : {"QA": tedx_by_slug["QA"]}}
 
-#### READ INPUT FILES TO CREATE AN INPUT DATASET
-tedx_dataset = spark.read \
-	.option("header","true") \
-	.option("quote", "\"") \
-	.option("escape", "\"") \
-	.csv(tedx_dataset_path)
+	update_result = collection.update_one(query, setter, upsert=False)
 
-tedx_dataset.printSchema()
-
-
-#### FILTER ITEMS WITH NULL POSTING KEY
-count_items = tedx_dataset.count()
-count_items_null = tedx_dataset.filter("id is not null").count()
-
-print(f"Number of items from RAW DATA {count_items}")
-print(f"Number of items from RAW DATA with NOT NULL KEY {count_items_null}")
-
-## READ THE DETAILS
-details_dataset_path = "s3://p9-prog-data/details.csv"
-details_dataset = spark.read \
-	.option("header","true") \
-	.option("quote", "\"") \
-	.option("escape", "\"") \
-	.csv(details_dataset_path)
-
-details_dataset = details_dataset.select(col("id").alias("id_ref"),
-	col("description"),
-	col("duration"),
-	col("publishedAt"))
-
-# AND JOIN WITH THE MAIN TABLE
-tedx_dataset_main = tedx_dataset.join(details_dataset, tedx_dataset.id == details_dataset.id_ref, "left") \
-	.drop("id_ref")
-
-tedx_dataset_main.printSchema()
-
-## READ TAGS DATASET
-tags_dataset_path = "s3://p9-prog-data/tags.csv"
-tags_dataset = spark.read.option("header","true").csv(tags_dataset_path)
-
-
-# CREATE THE AGGREGATE MODEL, ADD TAGS TO TEDX_DATASET
-tags_dataset_agg = tags_dataset.groupBy(col("id").alias("id_ref")).agg(collect_list("tag").alias("tags"))
-tags_dataset_agg.printSchema()
-tedx_dataset_agg = tedx_dataset_main.join(tags_dataset_agg, tedx_dataset.id == tags_dataset_agg.id_ref, "left") \
-	.drop("id_ref") \
-	.select(col("id").alias("_id"), col("*")) \
-	.drop("id") \
-
-tedx_dataset_agg.printSchema()
-
-
-## READ THE DETAILS
-details_dataset_path = "s3://p9-prog-data/details.csv"
-details_dataset = spark.read \
-	.option("header","true") \
-	.option("quote", "\"") \
-	.option("escape", "\"") \
-	.csv(details_dataset_path)
-
-details_dataset = details_dataset.dropna()
-
-details_dataset = details_dataset.select(col("id").alias("id_ref"),
-	col("description"),
-	col("duration"),
-	col("publishedAt"))
-
-
-## READ THE IMAGES (VERSIONE NUOVA)
-images_dataset_path = "s3://p9-prog-data/images.csv"
-images_dataset = spark.read \
-	.option("header","true") \
-	.option("quote", "\"") \
-	.option("escape", "\"") \
-	.csv(images_dataset_path)
-
-images_dataset = images_dataset.select(col("id").alias("id_ref"),
-	col("url").alias("img_url"))
-
-# AND JOIN WITH THE MAIN TABLE
-tedx_dataset_agg_img = tedx_dataset_agg.join(images_dataset, tedx_dataset_agg._id == images_dataset.id_ref, "left") \
-	.drop("id_ref")
-
-tedx_dataset_agg_img.printSchema()
-
-
-## READ WATCH NEXT DATASET
-wn_dataset_path = "s3://p9-prog-data/related_videos.csv"
-wn_dataset = spark.read.option("header","true").csv(wn_dataset_path)
-
-wn_dataset = wn_dataset.drop_duplicates()
-
-wn_real_id = wn_dataset.select(col("internalId").alias("internal"), col("id").alias("real_id")).distinct()
-
-wn_dataset = wn_dataset.join(wn_real_id, wn_dataset.related_id==wn_real_id.internal, "left")
-
-wn_dataset.printSchema()
-
-# CREATE THE AGGREGATE MODEL, ADD TAGS TO TEDX_DATASET
-wn_dataset_agg = wn_dataset.groupBy(col("id").alias("id_ref")).agg(collect_list("real_id").alias("related_videos"))
-
-#wn_dataset_agg.printSchema()
-
-tedx_dataset_agg_img_wn = tedx_dataset_agg_img.join(wn_dataset_agg, tedx_dataset_agg_img._id == wn_dataset_agg.id_ref, "left") \
-	.drop("id_ref")
-
-wn_dataset_views = wn_dataset.select(col("real_id"), col("viewedCount").alias("views")).distinct()
-
-tedx_dataset_agg_img_wn_views = tedx_dataset_agg_img_wn.join(wn_dataset_views, tedx_dataset_agg_img_wn._id == wn_dataset_views.real_id, "left") \
-	.drop("real_id")
-
-write_mongo_options = {
-	"connectionName": "pg9-mongodb-connection",
-	"database": "unibg_tedx_2024",
-	"collection": "tedx_data",
-	"ssl": "true",
-	"ssl.domain_match": "false"}
-from awsglue.dynamicframe import DynamicFrame
-tedx_dataset_dynamic_frame = DynamicFrame.fromDF(tedx_dataset_agg_img_wn_views, glueContext, "nested")
-
-glueContext.write_dynamic_frame.from_options(tedx_dataset_dynamic_frame, connection_type="mongodb", connection_options=write_mongo_options)
+	# se come risposta si ha null, buol dire che il json è invalido
+	print("Successo")
+	return {
+		'statusCode': 200,
+		'headers': {'Content-Type': 'text/plain'},
+		'body': json.dumps({"result": "ok"}),
+	}
