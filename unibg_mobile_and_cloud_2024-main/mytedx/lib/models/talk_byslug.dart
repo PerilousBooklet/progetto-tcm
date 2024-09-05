@@ -11,7 +11,7 @@ class TalkBySlug {
   String img_url = "";
   List<String> related_videos = [""];
   String views = "0";
-  List<String> QA = [""];
+  List<String> QA = [];
 
   TalkBySlug.fromJSON(Map<String, dynamic> jsonMap) {
     id = jsonMap['_id'];

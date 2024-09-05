@@ -10,8 +10,14 @@ class TalkSingle extends StatelessWidget {
   final String slug;
 
   goToQuestionAnswer(BuildContext context, List<String> qaList) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => QuestionAnswerPage()));
+    if (qaList.first == "") {
+      return;
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuestionAnswerPage(qa: qaList)));
+    }
   }
 
   goToQuestionCreator(BuildContext context) {
