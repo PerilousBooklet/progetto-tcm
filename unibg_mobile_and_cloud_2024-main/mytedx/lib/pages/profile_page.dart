@@ -39,29 +39,30 @@ class _ProfilePage extends State<ProfilePage> {
         Center(
           child: Container(
             height: 150.0,
-            width: MediaQuery.of(context).size.width - 20,
-            padding: const EdgeInsets.only(top: 0),
+            width: MediaQuery.of(context).size.width - 40,
             child: Column(
               children: [
                 // Username Field
+                TextField(
+                  enabled: _isTextFieldEnabled,
+                  controller: _controller,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'User Name',
+                      hintText: 'Enter name'),
+                ),
                 Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                      enabled: _isTextFieldEnabled,
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'User Name',
-                          hintText: 'Enter name'),
-                    )),
-                Row(
-                  children: [
-                    OutlinedButton(
-                        onPressed: loginPress, child: const Text("Login")),
-                    const Padding(padding: EdgeInsets.all(10)),
-                    OutlinedButton(
-                        onPressed: logoutPress, child: const Text("Logout"))
-                  ],
+                  padding: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: loginPress, child: const Text("Login")),
+                      const Padding(padding: EdgeInsets.all(10)),
+                      ElevatedButton(
+                          onPressed: logoutPress, child: const Text("Logout"))
+                    ],
+                  ),
                 )
               ],
             ),
